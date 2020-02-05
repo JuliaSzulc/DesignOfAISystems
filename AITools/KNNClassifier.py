@@ -1,4 +1,4 @@
-from Utils.py import get_euclidan_distances
+from Utils import get_euclidan_distances
 
 class KNNClassifier:
 
