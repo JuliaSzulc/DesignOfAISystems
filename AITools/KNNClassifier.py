@@ -12,8 +12,11 @@ class KNNClassifier:
         self.labels = Y
 
     def predict(self, X):
+        predictions = []
         for _,row in X.iterrows():
-           self.predict_label(row)
+           predictions.append(self.predict_label(row))
+
+        return predictions
 
     def predict_label(self,row):
         distances = get_euclidan_distances(self.data,row)
@@ -28,6 +31,10 @@ class KNNClassifier:
         else:
             return 0
 
-
-    def score(self):
-        pass
+    def score(self, Y_predicted, Y_real):
+        if len(Y_predicted)!=len(Y_real):
+            print("Different sizes on predicted and real.")
+            return -1
+        length = len(Y_predicted)
+        correct_count = sum(1 for i in range(0,length) if Y_predicted[i]==Y_real[i])
+        return correct_count/length
