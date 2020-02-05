@@ -17,8 +17,12 @@ def get_euclidan_distances(df, newrow):
 
     return distances
 
-def prepare_data_and_labels(df):
-    Y = df['PM_HIGH']
-    X = df.drop(columns='PM_HIGH')
+
+def prepare_data_and_labels(df1, df2=pd. DataFrame()):
+    if not df2.empty:
+        df1 = df1.append(df2, ignore_index=True)
+
+    Y = df1['PM_HIGH']
+    X = df1.drop(columns='PM_HIGH')
 
     return X, Y

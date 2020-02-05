@@ -13,8 +13,9 @@ class KNNClassifier:
 
     def predict(self, X):
         predictions = []
-        for _,row in X.iterrows():
-           predictions.append(self.predict_label(row))
+        for i, row in X.iterrows():
+            print(i)
+            predictions.append(self.predict_label(row))
 
         return predictions
 
