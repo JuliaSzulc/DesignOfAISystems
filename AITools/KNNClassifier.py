@@ -1,3 +1,10 @@
+"""
+Design of AI Systems
+Assignment no. 3
+Sarah Lindau, Julia Szulc
+Chalmers University of Technology, 2020
+"""
+
 from Utils import get_euclidean_distances
 
 
@@ -17,8 +24,7 @@ class KNNClassifier:
         total = len(X.index)
 
         i = 0
-        for _, row in X.iterrows():
-            i += 1
+        for i, (_, row) in enumerate(X.iterrows()):
             print("%d/%d" % (i, total), end='\r')
             predictions.append(self.predict_label(row))
 

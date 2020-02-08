@@ -1,3 +1,10 @@
+"""
+Design of AI Systems
+Assignment no. 3
+Sarah Lindau, Julia Szulc
+Chalmers University of Technology, 2020
+"""
+
 import pandas as pd
 from sklearn.model_selection import KFold
 
@@ -14,12 +21,11 @@ SHENYANG_PATH = 'data/Shenyang_labeled.csv'
 def validate(clf, X, Y, n_splits=5):
     print("Validation phase:")
 
-    kf = KFold(n_splits=n_splits)
+    kf = KFold(n_splits=n_splits, shuffle=True)
+    total_score = 0
 
-    i = 1
-    for train_index, test_index in kf.split(X):
+    for i, (train_index, test_index) in enumerate(kf.split(X)):
         print("validation %d/%d" % (i, n_splits))
-        i += 1
 
         X_train, X_validate = X.iloc[train_index], X.iloc[test_index]
         Y_train, Y_validate = Y.iloc[train_index], Y.iloc[test_index]
@@ -27,8 +33,10 @@ def validate(clf, X, Y, n_splits=5):
         clf.fit(X_train, Y_train)
         Y_pred = clf.predict(X_validate)
 
-        score = clf.score(Y_pred, Y_validate)
-        print("accuracy: ", score)
+        total_score += clf.score(Y_pred, Y_validate)
+
+    total_score /= n_splits
+    print("accuracy: %f\n" % total_score)
 
 
 def test(clf, X_test, Y_test):
@@ -37,7 +45,7 @@ def test(clf, X_test, Y_test):
     Y_pred = clf.predict(X_test)
 
     score = clf.score(Y_pred, Y_test)
-    print("accuracy: ", score)
+    print("accuracy: %f\n" % score)
 
 
 def main():

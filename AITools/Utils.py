@@ -1,3 +1,10 @@
+"""
+Design of AI Systems
+Assignment no. 3
+Sarah Lindau, Julia Szulc
+Chalmers University of Technology, 2020
+"""
+
 import math
 import pandas as pd
 
@@ -26,5 +33,3 @@ def prepare_data_and_labels(df1, df2=pd.DataFrame()):
     X = df1.drop(columns='PM_HIGH')
 
     return X, Y
-
-
