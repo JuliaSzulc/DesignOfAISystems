@@ -32,9 +32,27 @@ for i in range(len(sv_list) - 1):
     word1 = sv_list[i]
     word2 = sv_list[i + 1]
 
-    if word1 in TERMINATION_MARKS or word2 in TERMINATION_MARKS:
+    if word2 in TERMINATION_MARKS:
+        continue
+
+    if word1 in TERMINATION_MARKS:
+        bigram_counter[word2] += 1
         continue
 
     bigram_counter[word1 + ' ' + word2] += 1
 
 print(bigram_counter.most_common(20))
+
+def maximum_likelihood(words, word):
+    return bigram_counter[words]/eng_counter[word]
+
+def probability_of(sentence):
+    total_probability=bigram_counter[sentence[0]]/sv_counter[sentence[0]]
+
+    for i in range(len(sentence) - 1):
+        word_pair = sentence[i] + ' ' + sentence[i+1]
+        total_probability *= bigram_counter[word_pair]/sv_counter[sentence[i]]
+
+    return total_probability
+
+print(probability_of(['för', 'att', 'jag']))
