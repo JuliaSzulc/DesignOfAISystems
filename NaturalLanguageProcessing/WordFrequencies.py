@@ -3,25 +3,38 @@ import re
 
 SV_PATH = 'Data/europarl-v7.sv-en.lc.sv'
 ENG_PATH = 'Data/europarl-v7.sv-en.lc.en'
+TERMINATION_MARKS = ['.', '?', '!', ';']
+
+def count_words(path):
+    with open(path) as f:
+        txt = f.read()
+    # txt = re.sub('[^a-zåäö\']+', " ", txt)
+    txt = re.sub('[^a-zåäö.?!;\']+', " ", txt)  # we keep the termination marks
+    words_list = list(txt.split())
+    # flat_list=[word for line in f for word in line.split()]
+    counter = Counter(words_list)
+
+    return words_list, counter
 
 
-with open(SV_PATH) as f:
-    text = f.read()
-    text = re.sub('[^a-zåäö\ \']+', " ", text)
-    sv_words = list(text.split())
-   # flat_list=[word for line in f for word in line.split()]
+sv_list, sv_counter = count_words(SV_PATH)
+eng_list, eng_counter = count_words(ENG_PATH)
 
-sv_counter = Counter(sv_words)
-print(sv_counter.most_common(10))
+# print(sv_counter.most_common(10))
+# print(eng_counter.most_common(10))
+#
+# print(eng_counter['speaker']/len(eng_list))
+# print(eng_counter['zebra']/len(eng_list))
 
-with open(ENG_PATH) as f:
-    text = f.read()
-    text = re.sub('[^a-zåäö\ \']+', " ", text)
-    eng_words = list(text.split())
-   # flat_list=[word for line in f for word in line.split()]
+bigram_counter = Counter()
 
-eng_counter = Counter(eng_words)
-print(eng_counter.most_common(10))
+for i in range(len(sv_list) - 1):
+    word1 = sv_list[i]
+    word2 = sv_list[i + 1]
 
-print(eng_counter['speaker']/len(eng_words))
-print(eng_counter['zebra']/len(eng_words))
+    if word1 in TERMINATION_MARKS or word2 in TERMINATION_MARKS:
+        continue
+
+    bigram_counter[word1 + ' ' + word2] += 1
+
+print(bigram_counter.most_common(20))
