@@ -22,3 +22,6 @@ with open(ENG_PATH) as f:
 
 eng_counter = Counter(eng_words)
 print(eng_counter.most_common(10))
+
+print(eng_counter['speaker']/len(eng_words))
+print(eng_counter['zebra']/len(eng_words))
