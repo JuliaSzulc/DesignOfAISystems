@@ -1,7 +1,8 @@
 from Utils import *
 from Bigram import *
+from Translator import *
 
-SV_PATH = 'Data/europarl-v7.sv-en.lc.sv'
+SV_PATH = 'Data/europarl-v7.sv-en.lc2.sv'
 ENG_PATH = 'Data/europarl-v7.sv-en.lc.en'
 
 
@@ -17,8 +18,9 @@ def main():
 
     bigram = Bigram(sv_list)
 
-    sentence = "för"
-    sentence = convert_text_to_list(sentence)
+    sentence = "ett direktiv som utvecklas endast för direktivens egen skull " \
+               "vore inte värdigt kammaren ."
+    sentence = convert_text_to_words_list(sentence)
 
     print(bigram.calculate_probability_of_sentence(sentence))
 

@@ -8,15 +8,27 @@ def prepare_data(path):
     with open(path) as f:
         txt = f.read()
 
-    words_list = convert_text_to_list(txt)
-    counter = Counter(words_list)
+    sentences_list = convert_text_to_sentences_list(txt)
+    counter = Counter(convert_text_to_words_list(txt))
 
-    return words_list, counter
+    return sentences_list, counter
 
 
-def convert_text_to_list(txt):
-    # txt = re.sub('[^a-zåäö\']+', " ", txt)
-    txt = re.sub('[^a-zåäö.?!;\']+', " ", txt)  # we keep the termination marks
+def convert_text_to_words_list(txt):
+    txt = re.sub('[^a-zåäö\']+', " ", txt)
     words_list = list(txt.split())
 
     return words_list
+
+
+def convert_text_to_sentences_list(txt):
+    sentences = []
+    txt = re.sub('[^a-zåäö.?!;\']+', " ", txt)
+
+    for sentence_str in re.split("[.!?;](?!<$)", txt):
+        sentence_str.strip()
+
+        if sentence_str:
+            sentences.append(sentence_str.split())
+
+    return sentences
