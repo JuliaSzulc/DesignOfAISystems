@@ -3,7 +3,7 @@ from itertools import chain
 from numpy import log, exp
 
 
-class Bigram:
+class LanguageModel:
     def __init__(self, sentences_list):
         self.pairs_counter = Counter()
         self.words_counter = Counter()

@@ -1,6 +1,6 @@
 from Utils import *
-from Bigram import *
-from Translator import *
+from LanguageModel import *
+from TranslationModel import *
 
 SV_PATH = 'Data/europarl-v7.sv-en.lc.sv'
 ENG_PATH = 'Data/europarl-v7.sv-en.lc.en'
@@ -16,7 +16,7 @@ def main():
     # print(eng_counter['speaker'] / len(eng_list))
     # print(eng_counter['zebra'] / len(eng_list))
 
-    # sv_bigram = Bigram(sv_list)
+    # sv_bigram = LanguageModel(sv_list)
     #
     # sentence = "ett direktiv som utvecklas endast för direktivens egen " \
     #            "skull vore inte värdigt kammaren ."
@@ -24,11 +24,11 @@ def main():
     #
     # print(sv_bigram.calculate_probability_of_sentence(sentence))
 
-    a = prepare_data('Data/1')
-    b = prepare_data('Data/2')
+    a = prepare_data('Data/3')
+    b = prepare_data('Data/4')
 
-    t = Translator(foreign_sentences=sv_list,
-                   native_sentences=eng_list)
+    t = TranslationModel(foreign_sentences=sv_list,
+                         native_sentences=eng_list)
     t.train(epochs=10, printed_results=10, printed_words=['european'])
 
 main()
