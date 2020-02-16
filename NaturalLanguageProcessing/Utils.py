@@ -7,9 +7,8 @@ def prepare_data(path):
         txt = f.read()
 
     sentences_list = convert_text_to_sentences_list(txt)
-    counter = Counter(convert_text_to_words_list(txt))
 
-    return sentences_list, counter
+    return sentences_list
 
 
 def convert_text_to_words_list(txt):

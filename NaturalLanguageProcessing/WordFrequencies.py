@@ -7,8 +7,8 @@ ENG_PATH = 'Data/europarl-v7.sv-en.lc.en'
 
 
 def main():
-    # sv_list, sv_counter = prepare_data(SV_PATH)
-    # eng_list, eng_counter = prepare_data(ENG_PATH)
+    sv_list = prepare_data(SV_PATH)
+    eng_list = prepare_data(ENG_PATH)
 
     # print(sv_counter.most_common(10))
     # print(eng_counter.most_common(10))
@@ -24,8 +24,8 @@ def main():
     #
     # print(sv_bigram.calculate_probability_of_sentence(sentence))
 
-    a, _ = prepare_data('Data/1')
-    b, _ = prepare_data('Data/2')
+    a = prepare_data('Data/1')
+    b = prepare_data('Data/2')
 
     t = Translator(a, b)
     t.train()
