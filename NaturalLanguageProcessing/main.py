@@ -27,8 +27,8 @@ def main():
     a = prepare_data('Data/1')
     b = prepare_data('Data/2')
 
-    t = Translator(foreign_sentences=a,
-                   native_sentences=b)
-    t.train(epochs=10, printed_results=3)
+    t = Translator(foreign_sentences=sv_list,
+                   native_sentences=eng_list)
+    t.train(epochs=10, printed_results=10, printed_words=['european'])
 
 main()

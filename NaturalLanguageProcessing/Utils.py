@@ -3,12 +3,14 @@ import re
 
 
 def prepare_data(path):
+    lines = []
     with open(path) as f:
-        txt = f.read()
+        for line in f:
+            lines.append(line)
 
-    sentences_list = convert_text_to_sentences_list(txt)
+    sentences_words_list = convert_text_lines_to_sentences_list(lines)
 
-    return sentences_list
+    return sentences_words_list
 
 
 def convert_text_to_words_list(txt):
@@ -27,5 +29,18 @@ def convert_text_to_sentences_list(txt):
 
         if sentence_str:
             sentences.append([''] + sentence_str.split())
+
+    return sentences
+
+
+def convert_text_lines_to_sentences_list(lines):
+    sentences = []
+
+    for line in lines:
+        sentence = re.sub('[^a-zåäö\']+|(&quot;)+', " ", line)
+        sentence = sentence.strip()
+
+        if sentence:
+            sentences.append([''] + sentence.split())
 
     return sentences
