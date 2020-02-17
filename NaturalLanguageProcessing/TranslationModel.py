@@ -2,9 +2,13 @@ from collections import Counter
 from random import random
 from itertools import chain
 
+from Evaluation import *
+
 
 class TranslationModel:
-    def __init__(self, foreign_sentences, native_sentences):
+    def __init__(self, foreign_sentences, native_sentences,
+                 probabilities_path=''):
+
         self.foreign_sentences = foreign_sentences
         self.native_sentences = native_sentences
 
@@ -16,6 +20,21 @@ class TranslationModel:
         self.pseudo_counts = {}  # [n][f]
         self.foreign_counts = Counter()
         self.native_counts = Counter()
+
+        self.evaluation = Evaluation()
+
+    def translate(self, sentence):
+        # self.translation_probs = self.evaluation.get_probabilities()
+        translation = []
+        probability = 1
+
+        for word in sentence:
+            t_word = max(self.translation_probs[word],
+                         key=self.translation_probs[word].get)
+            translation.append(t_word)
+            probability *= self.translation_probs[word][t_word]
+
+        return translation, probability
 
     def train(self, epochs=10, printed_results='all', printed_words=[]):
         self.init_translation_probabilities_dict()
@@ -38,7 +57,9 @@ class TranslationModel:
                                            self.translation_probs[n_word][f_word])
             print('\n')
             self.update_probabilities()
+
             self.print_results(printed_results, printed_words)
+        # self.evaluation.set_probabilities(self.translation_probs)
 
     def initialize_probability_if_needed(self, n_word, f_word):
         if f_word not in self.translation_probs[n_word].keys():

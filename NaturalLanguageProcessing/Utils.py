@@ -15,7 +15,7 @@ def prepare_data(path):
 
 def convert_text_to_words_list(txt):
     txt = re.sub('[^a-zåäö\']+|(&quot;)+', " ", txt)
-    words_list = list(txt.split())
+    words_list = [''] + list(txt.split())
 
     return words_list
 

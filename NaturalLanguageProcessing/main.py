@@ -17,18 +17,17 @@ def main():
     # print(eng_counter['zebra'] / len(eng_list))
 
     # sv_bigram = LanguageModel(sv_list)
-    #
+
     # sentence = "ett direktiv som utvecklas endast för direktivens egen " \
     #            "skull vore inte värdigt kammaren ."
     # sentence = convert_text_to_words_list(sentence)
-    #
-    # print(sv_bigram.calculate_probability_of_sentence(sentence))
 
-    a = prepare_data('Data/3')
-    b = prepare_data('Data/4')
+    # print(sv_bigram.calculate_probability_of_sentence(sentence))
 
     t = TranslationModel(foreign_sentences=sv_list,
                          native_sentences=eng_list)
     t.train(epochs=10, printed_results=10, printed_words=['european'])
+    transl, prob = t.translate(['our', 'member', 'states'])
+    print(transl, prob)
 
 main()
