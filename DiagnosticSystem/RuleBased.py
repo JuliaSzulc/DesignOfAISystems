@@ -16,7 +16,7 @@ def define_rule(param):
 
 
 def define_stdev_rule(param):
-    return lambda x: x[param] >= thresholds[param]
+    return lambda x: stdev(x[param + i] for i in nuclei_index) >= thresholds[param]
 
 
 def get_threshold(param_name, data):
@@ -53,8 +53,8 @@ def fit(X, Y):
         for i in nuclei_index:
             param_name = param + i
             thresholds[param_name] = get_threshold(param_name, df)
-    # for param in stdev_params:
-    #     thresholds[param] = get_stdev_threshold(param, df)
+    for param in stdev_params:
+        thresholds[param] = get_stdev_threshold(param, df)
 
 
 def predict_single_entry(x):
@@ -62,9 +62,9 @@ def predict_single_entry(x):
         for i in nuclei_index:
             if define_rule(param + i)(x):
                 return 1
-    # for stdev_param in stdev_params:
-    #     if define_stdev_rule(stdev_param)(x):
-    #         return 1
+    for stdev_param in stdev_params:
+        if define_stdev_rule(stdev_param)(x):
+            return 1
     return 0
 
 
