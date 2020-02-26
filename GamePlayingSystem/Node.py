@@ -1,9 +1,12 @@
 class Node:
-    N=0
-    Q=0
-    children = []
-    state = []
-    empty_squares = 0
+
+    def __init__(self, state, empty_squares, turn):
+        self.visits=0
+        self.reward=0
+        self.children = []
+        self.state = state
+        self.empty_squares = empty_squares
+        self.turn = turn
 
     def is_terminal(self):
         return (self.empty_squares < 1)#||win
