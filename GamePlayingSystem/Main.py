@@ -1,8 +1,3 @@
-import Tree
-import Node
+from Tree import *
 
 tree = Tree('x', 3)
-while True:
-    if not tree.run():
-        break
-

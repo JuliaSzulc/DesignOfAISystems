@@ -1,4 +1,4 @@
-import Node
+from Node import *
 from random import choice
 import numpy as np
 
@@ -26,9 +26,10 @@ class Tree:
 
 
     def simulate(self, node):
-        while not node.is_terminal():
-            node = self.expand_child(node)
-        return node
+        simulated_node = node
+        while not simulated_node.is_terminal():
+            simulated_node = self.expand_child(simulated_node)
+        return simulated_node
 
 
     def evaluate(self, node):
@@ -79,8 +80,8 @@ class Tree:
 
 
     def expand_child(self, node):
-        child_state = node.state
-        empty_fields = np.where(child_state == b'')
+        child_state = np.copy(node.state)
+        empty_fields = np.where(child_state == '')
         chosen_index = choice(range(len(empty_fields[0])))
         square = (empty_fields[0][chosen_index], empty_fields[1][chosen_index])
         child_turn = 'o' if node.turn == 'x' else 'x'
