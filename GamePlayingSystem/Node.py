@@ -8,12 +8,15 @@ class Node:
         self.empty_squares = empty_squares
         self.turn = turn
         self.parent = None
+        self.win = False
 
     def is_terminal(self):
-        return (self.empty_squares < 1)#||win
+        return self.is_leaf() or self.win
 
-    def create_child(self):
-        #Add child to child list
-        child = Node()
-        return child
+    def is_leaf(self):
+        return self.empty_squares < 1
+
+    def is_expandable(self):
+        return len(self.children) < self.empty_squares and not self.is_terminal()
+
 

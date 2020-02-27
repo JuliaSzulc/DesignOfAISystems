@@ -1,22 +1,27 @@
 import Node
 from random import choice
 import numpy as np
-from numpy import chararray
 
 class Tree:
-    def __init__(self, symbol):
-        self.root = Node()
-        self.expandable_nodes = [] #To avoid going down the same path twice
+    def __init__(self, symbol, dimension):
+        self.root = Node(np.full((dimension,dimension), ''),dimension**2, symbol)#empty_squares, turn
+        self.expandable_nodes = [self.root] #To avoid going down the same path twice
         self.symbol = symbol
 
     def select(self):
+        if not self.expandable_nodes:
+            return None
         exp_node = choice(self.expandable_nodes)
+
         return exp_node
 
     def expand(self, expandable_node):
         child = self.expand_child(expandable_node)
         child.parent = expandable_node
         expandable_node.children.append(child)
+        if self.check_winner(child):
+           child.win = True
+
         return child
 
 
@@ -27,7 +32,6 @@ class Tree:
 
 
     def evaluate(self, node):
-        node.visits += 1
         winner = self.check_winner(node)
         if winner == self.symbol:
             return 1
@@ -36,8 +40,8 @@ class Tree:
         return -1
 
 
-    def backpropagate(self, node):
-        result = self.evaluate(node)
+    def backpropagate(self, simulated_node, node):
+        result = self.evaluate(simulated_node)
         node.visits += 1
         node.reward += result
         while node.parent:
@@ -45,6 +49,11 @@ class Tree:
             node.visits += 1
             node.reward += result
 
+    def update_tree(self, exp_node, child):
+        if not exp_node.is_expandable():
+            self.expandable_nodes.remove(exp_node)
+        if not child.is_terminal():
+            self.expandable_nodes.append(child)
 
 
     def check_winner(self, node):
@@ -78,3 +87,14 @@ class Tree:
         child_state[square[0], square[1]] = child_turn
         child = Node(child_state, node.empty_squares - 1, child_turn)
         return child
+
+    def run(self):
+        parent = self.select()
+        if not parent:
+            return False
+        child = self.expand(parent)
+        simulated_node = self.simulate(child)
+        self.backpropagate(simulated_node, child)
+        self.update_tree(parent, child)
+
+        return True
