@@ -7,6 +7,7 @@ class Node:
         self.state = state
         self.empty_squares = empty_squares
         self.turn = turn
+        self.parent = None
 
     def is_terminal(self):
         return (self.empty_squares < 1)#||win

@@ -4,9 +4,10 @@ import numpy as np
 from numpy import chararray
 
 class Tree:
-    def __init__(self):
+    def __init__(self, symbol):
         self.root = Node()
         self.expandable_nodes = [] #To avoid going down the same path twice
+        self.symbol = symbol
 
     def select(self):
         exp_node = choice(self.expandable_nodes)
@@ -14,6 +15,7 @@ class Tree:
 
     def expand(self, expandable_node):
         child = self.expand_child(expandable_node)
+        child.parent = expandable_node
         expandable_node.children.append(child)
         return child
 
@@ -25,9 +27,25 @@ class Tree:
 
 
     def evaluate(self, node):
-        self.check_winner(node)
-        result = 1 #-1 loss,0 draw,1 win
-        return result
+        node.visits += 1
+        winner = self.check_winner(node)
+        if winner == self.symbol:
+            return 1
+        if not winner:
+            return 0
+        return -1
+
+
+    def backpropagate(self, node):
+        result = self.evaluate(node)
+        node.visits += 1
+        node.reward += result
+        while node.parent:
+            node = node.parent
+            node.visits += 1
+            node.reward += result
+
+
 
     def check_winner(self, node):
         state = node.state
@@ -49,13 +67,6 @@ class Tree:
             if all(state[i][-i] == char for i in range(1, state.shape[0])):
                 return char
         return None
-
-
-
-    def get_random_path(self):
-        nodes_copy = self.root.copy()
-        #Get children all the way
-        #When there is no child, create a new node unless it's terminal - then we need to select different path
 
 
     def expand_child(self, node):
