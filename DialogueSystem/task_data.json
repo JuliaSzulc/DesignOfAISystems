@@ -1,0 +1,13 @@
+{
+  "Task 1": {
+    "keywords": ["next", "earliest", "first"],
+    "form_fields": ["from", "to"]
+  },
+  "Task 2": {
+    "keywords": ["line", "number", "tram number", "bus number"],
+    "form_fields": ["line", "from", "time"]
+  },
+  "Task 3": {
+    "keywords": ["price", "how much", "cost", "costs"]
+  }
+}
