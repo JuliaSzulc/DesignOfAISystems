@@ -1,17 +1,17 @@
 {
   "Task 1": {
     "keywords": ["next", "earliest", "first"],
-    "form_fields": ["from", "to"],
+    "form_fields": ["starting point", "destination"],
     "rules": ["(?<=\\bfrom\\s)(\\w+)", "(?<=\\bto\\s)(\\w+)"]
   },
   "Task 2": {
     "keywords": ["line", "number", "tram number", "bus number"],
-    "form_fields": ["line", "from", "time"],
+    "form_fields": ["line", "starting point", "departure time"],
     "rules": []
   },
   "Task 3": {
     "keywords": ["price", "how much", "cost", "costs"],
-    "form_fields": ["from", "to", "type"],
+    "form_fields": ["starting point", "destination", "ticket type"],
     "rules": []
   }
 }
