@@ -15,6 +15,7 @@ class DialogueManager:
         print("Hi, I am your digital Västtrafik assistant, Vivvi.")
         while True:
             user_input = input("How can I help you today?\n")
+            user_input = user_input.lower()
             task = self.determine_task(user_input)
 
             if task:
@@ -41,7 +42,6 @@ class DialogueManager:
 
         print("Sorry, I cannot understand you. Please rephrase.\n")
         return None
-        #Cannot be determined -> initialize conversation again
-        #task -> fill a form for that task
+
 
 

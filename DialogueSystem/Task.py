@@ -8,4 +8,5 @@ class Task:
         self.rules = rules
 
     def is_this_task(self, sentence):
-        pass
+        sentence = sentence.split()
+        return any(keyword in sentence for keyword in self.keywords)
