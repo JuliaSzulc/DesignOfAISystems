@@ -11,7 +11,7 @@ class DialogueManager:
         self.task_manager = TaskManager()
 
     def talk(self):
-        print("Hi, I am your digital Västtrafik assistant, Vivvi.")
+        print("Hi, I am your digital Västtrafik assistant, Jessie.")
         while True:
             user_input = input("How can I help you today?\n")
             user_input = user_input.lower()
