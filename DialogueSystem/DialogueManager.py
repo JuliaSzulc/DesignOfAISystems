@@ -5,13 +5,12 @@ from TaskManager import *
 
 class DialogueManager:
 
-    def __init__(self, task_file_name):
-        self.tasks = task_file_name
+    def __init__(self, tasks):
+        self.tasks = tasks
         self.form_builder = FormBuilder()
         self.task_manager = TaskManager()
 
     def talk(self):
-
         print("Hi, I am your digital Västtrafik assistant, Vivvi.")
         while True:
             user_input = input("How can I help you today?\n")

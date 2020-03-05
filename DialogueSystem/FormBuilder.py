@@ -1,3 +1,4 @@
+import re
 
 class FormBuilder:
 
@@ -7,8 +8,8 @@ class FormBuilder:
             form = dict.fromkeys(task.form_fields.keys())
 
         input_list = user_input.split()
-        for rule, field in zip(task.rules, task.form_fields.keys()):
-            word = rule(input_list)
+        for regex, field in zip(task.rules, task.form_fields.keys()):
+            word = re.search(regex, input_list)
             if not word:
                 more_info.append(field)
             form[field] = word
