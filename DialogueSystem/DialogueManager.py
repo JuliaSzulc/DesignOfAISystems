@@ -19,7 +19,7 @@ class DialogueManager:
 
             if task:
                 form = self.process_input(task, user_input)
-                output = task_manager.get_output(form)
+                output = self.task_manager.get_output(form)
                 print(output)
 
 
@@ -28,8 +28,9 @@ class DialogueManager:
 
         while more_info:
             missing_field = more_info[0]
-            user_input = input("Please specify your {}.".format(task.form_field[missing_field]))
-            form, more_info = self.form_builder.create_form(task, user_input, form)
+            user_input = input("Please specify your {}.\n".format(missing_field))
+            form, _ = self.form_builder.create_form(task, user_input, form)
+            more_info.remove(missing_field)
 
         return form
 

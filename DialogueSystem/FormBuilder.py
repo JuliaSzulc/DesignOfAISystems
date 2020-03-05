@@ -7,11 +7,11 @@ class FormBuilder:
         if not form:
             form = dict.fromkeys(task.form_fields)
 
-        input_list = user_input.split()
         for regex, field in zip(task.rules, task.form_fields):
-            word = re.search(regex, input_list)
+            word = re.search(regex, user_input)
             if not word:
                 more_info.append(field)
-            form[field] = word
+            else:
+                form[field] = word.group()
 
         return form, more_info
