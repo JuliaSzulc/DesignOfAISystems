@@ -39,8 +39,6 @@ class TaskManager:
         url = 'https://api.vasttrafik.se/bin/rest.exe/v2/trip'
         params = {'originId': origin_id,
                   'destId': dest_id,
-                  'date': 20200310,
-                  'time': "20:30",
                   'numTrips': 1}
         resp = self.send_request(url, params)
         trip = resp['TripList']['Trip'][0]['Leg']
