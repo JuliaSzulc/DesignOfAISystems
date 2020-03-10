@@ -1,17 +1,27 @@
 {
-  "Task 1": {
+  "BYE": {
+    "keywords": ["bye", "goodbye"],
+    "form_fields": [],
+    "rules": [],
+    "response": ""
+  },
+  "1": {
     "keywords": ["next", "earliest", "first"],
-    "form_fields": ["from", "to"],
-    "rules": ["(?<=\\bfrom\\s)(\\w+)", "(?<=\\bto\\s)(\\w+)"]
+    "form_fields": ["origin", "destination"],
+    "rules": ["(?<=\\bfrom\\s)(\\w+)", "(?<=\\bto\\s)(\\w+)"],
+    "response": "There is a {} {} from {} to {} going towards {} at {}."
   },
-  "Task 2": {
+  "2": {
     "keywords": ["line", "number", "tram number", "bus number"],
-    "form_fields": ["line", "from", "time"],
-    "rules": []
+    "form_fields": ["line", "origin", "time (hh:mm)"],
+    "rules": ["((?<=\\bline\\s)|(?<=\\bbus\\s)|(?<=\\btram\\s)|(?<=\\bnumber\\s))(\\w+)", "(?<=\\bfrom\\s)(\\w+)",
+      "((?<=\\bafter\\s)|(?<=\\bat\\s))(\\w+)"],
+    "response": "The next {} {} going towards {} departs from {} at {}."
   },
-  "Task 3": {
-    "keywords": ["price", "how much", "cost", "costs"],
-    "form_fields": ["from", "to", "type"],
-    "rules": []
+  "3": {
+    "keywords": ["time", "how", "long", "takes"],
+    "form_fields": ["origin", "destination"],
+    "rules": ["(?<=\\bfrom\\s)(\\w+)", "(?<=\\bto\\s)(\\w+)"],
+    "response": "It usually takes around {} minutes to go from {} to {}."
   }
 }

@@ -1,18 +1,10 @@
-from DialogueManager import *
-from Task import *
-
-import json
-
-
-def prepare_tasks(filename='task_data.json'):
-    with open(filename) as file:
-        data = json.loads(file.read())
-    tasks = []
-    for _,value in data.items():
-        tasks.append(Task(value["keywords"], value["form_fields"], value["rules"]))
-    return tasks
+from DialogueSystem.DialogueAgent import DialogueAgent
 
 
 if __name__ == '__main__':
-    dm = DialogueManager(prepare_tasks())
-    dm.talk()
+    credentials = {
+        'key': 'NPh8uEryvOnMabfZmdnh16c7xwMa',
+        'secret': 'Tg8gKHnK0h1hog1odVIEZ46W1XAa'}
+
+    agent = DialogueAgent(credentials)
+    agent.run()
