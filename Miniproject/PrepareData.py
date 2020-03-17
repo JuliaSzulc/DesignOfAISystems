@@ -1,13 +1,13 @@
 import pandas as pd
 from collections import Counter
+from sklearn.model_selection import train_test_split
 
 def prepare_data(path="stackoverflow.csv"):
     df = pd.read_csv(path, encoding="ISO-8859-1")
     df.drop(columns=['Id', 'Unnamed: 0','OwnerUserId', 'CreationDate', 'ClosedDate', 'Body', 'Score'], inplace=True)
     df = prepare_tags(df)
-
-
-    #Split data in to testing and training (vill ha med all tags någon gång i training)
+    X_train, X_test, y_train, y_test = split_data(df['Title'], df['Tags'])
+    return X_train, X_test, y_train, y_test
 
 
 def prepare_tags(df):
@@ -38,5 +38,6 @@ def filter_unique_tags(tags, unique_tags):
             filtered_tags.append(tag)
     return filtered_tags
 
-
-prepare_data()
+def split_data(X,Y):
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state = 42)
+    return X_train, X_test, y_train, y_test
