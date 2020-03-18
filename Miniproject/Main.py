@@ -12,7 +12,7 @@ if __name__ == '__main__':
     score = clf.score(y, y2)
     print(score)
 
-    exp = Experimenter(dp.unique_tags, x1, x2, y1, y2)
-    exp.run_all_experiments()
+    # exp = Experimenter(dp.unique_tags, x1, x2, y1, y2)
+    # exp.run_all_experiments()
 
 
