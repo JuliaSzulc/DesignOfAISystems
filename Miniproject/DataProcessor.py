@@ -4,10 +4,11 @@ from sklearn.model_selection import train_test_split
 
 
 class DataProcessor:
-    def __init__(self, path="stackoverflow.csv"):
+    def __init__(self, path="stackoverflow.csv", test_size=0.25):
         self.path = path
         self.data = None
         self.unique_tags = []
+        self.test_size = test_size
 
         self.prepare_data()
 
@@ -48,5 +49,6 @@ class DataProcessor:
 
     def get_data_splits(self):
         x_train, x_test, y_train, y_test = \
-            train_test_split(self.data['Title'], self.data['Tags'], random_state=42)
+            train_test_split(self.data['Title'], self.data['Tags'],
+                             test_size=self.test_size, random_state=42)
         return x_train, x_test, y_train, y_test

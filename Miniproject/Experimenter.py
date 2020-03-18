@@ -1,25 +1,43 @@
 from Model import *
 
-class Experimenter:
 
-    def __init__(self, unique_tags, X_train, X_test, Y_train, Y_test):
+class Experimenter:
+    def __init__(self, unique_tags, x_train, x_test, y_train, y_test):
         self.unique_tags = unique_tags
-        self.X_train = X_train
-        self.X_test = X_test
-        self.Y_train = Y_train
-        self.Y_test = Y_test
+        self.x_train = x_train
+        self.x_test = x_test
+        self.y_train = y_train
+        self.y_test = y_test
 
     def run_all_experiments(self):
-        print("Score without ngrams or stopwords: {}".format(self.run_experiment(ngram=False, stopwords=False)))
+        self.run_experiment(bigrams=False,
+                            stopwords=False,
+                            description='Basic case (no stopwords, unigrams)')
 
-        print("Score using ngrams only: {}".format(self.run_experiment(ngram=True, stopwords=False)))
+        self.run_experiment(bigrams=True,
+                            stopwords=False,
+                            description='Bigrams only')
 
-        print("Score using stopwords only: {}".format(self.run_experiment(ngram=False, stopwords=True)))
+        self.run_experiment(bigrams=False,
+                            stopwords=True,
+                            description='Stopwords only')
 
-        print("Score using both ngrams and stopwords: {}".format(self.run_experiment(ngram=True, stopwords=True)))
+        self.run_experiment(bigrams=True,
+                            stopwords=True,
+                            description='Bigrams & stopwords')
 
-    def run_experiment(self,ngram=False,stopwords=False):
-        clf = Model(ngrams=ngram, stopwords=stopwords, unique_tags=self.unique_tags)
-        clf.fit(self.X_train, self.Y_train)
-        y = clf.predict(self.X_test)
-        return clf.score(y, self.Y_test)
+    def run_experiment(self, bigrams=False, stopwords=False, max_features=None,
+                       description='', validation=False):
+        print(description)
+        clf = Model(bigrams=bigrams, stopwords=stopwords,
+                    max_features=max_features, unique_tags=self.unique_tags)
+
+        if validation:
+            cv_scores = clf.validate(self.x_train, self.y_train)
+            print('Cross-validation scores: {}'.format(cv_scores))
+            return
+
+        clf.fit(self.x_train, self.y_train)
+        y_predicted = clf.predict(self.x_test)
+        score = clf.score(y_predicted, self.y_test)
+        print('Accuracy: {0:.4f}\n'.format(score))

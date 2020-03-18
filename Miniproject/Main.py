@@ -1,18 +1,14 @@
+import sys
+
 from DataProcessor import *
-from Model import *
 from Experimenter import *
 
 if __name__ == '__main__':
-    dp = DataProcessor()
-    x1, x2, y1, y2 = dp.get_data_splits()
+    data_file = sys.argv[1] if len(sys.argv) > 1 else 'stackoverflow.csv'
 
-    clf = Model(unique_tags=dp.unique_tags)
-    clf.fit(x1, y1)
-    y = clf.predict(x2)
-    score = clf.score(y, y2)
-    print(score)
+    dp = DataProcessor(path=data_file, test_size=0.2)
+    x_train, x_test, y_train, y_test = dp.get_data_splits()
 
-    # exp = Experimenter(dp.unique_tags, x1, x2, y1, y2)
+    exp = Experimenter(dp.unique_tags, x_train, x_test, y_train, y_test)
     # exp.run_all_experiments()
-
-
+    exp.run_experiment(stopwords=True, bigrams=True, validation=True)
