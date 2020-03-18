@@ -2,7 +2,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.pipeline import make_pipeline
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
+import numpy as np
 
 import warnings
 
@@ -17,7 +18,7 @@ class Model:
         self.vectorizer = CountVectorizer(stop_words=stopwords,
                                           ngram_range=ngram_range,
                                           max_features=max_features)
-        self.classifier = OneVsRestClassifier(LogisticRegression())
+        self.classifier = OneVsRestClassifier(MultinomialNB())
 
         self.pipeline = make_pipeline(self.vectorizer,
                                       self.classifier)
@@ -26,28 +27,30 @@ class Model:
         print('Fitting...')
         encoded_y = self.label_binarizer.fit_transform(y)
 
-        #  multiclass.py prints warning if all the entries have the same label value
+        # multiclass.py prints warning if all the entries have the same label value
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore', category=UserWarning)
             self.pipeline.fit(x, encoded_y)
 
+    # For each entry returns a vector of probabilities
     def predict(self, x):
         print('Predicting...')
-        y_predicted = self.pipeline.predict(x)
+        x_transformed = self.vectorizer.transform(x)
+        y_predicted = self.classifier.predict_proba(x_transformed)
         return y_predicted
 
-    def score(self, y_predicted, y_real):
+    def score(self, y_probabilities, y_real):
         print('Scoring...')
-        decoded_y = self.label_binarizer.inverse_transform(y_predicted)
         correct_predictions = 0
 
-        for pred_tags, real_tags in zip(decoded_y, y_real):
+        for probabilities, real_tags in zip(y_probabilities, y_real):
             n = len(real_tags)
-            first_n_pred = pred_tags[:n]
+            top_n_indexes = np.argpartition(probabilities, -n)[-n:]
+            predicted_tags = self.label_binarizer.classes_[top_n_indexes]
 
-            if any([tag in real_tags for tag in first_n_pred]):
+            if any([tag in predicted_tags for tag in real_tags]):
                 correct_predictions += 1
 
-        score = correct_predictions / len(y_predicted)
+        score = correct_predictions / len(y_probabilities)
 
         return score
