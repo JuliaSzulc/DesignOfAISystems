@@ -1,13 +1,10 @@
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import SGDClassifier
 import numpy as np
 from math import ceil
 from itertools import repeat
-
 import warnings
 
 
@@ -21,8 +18,7 @@ class Model:
         self.vectorizer = CountVectorizer(stop_words=stopwords,
                                           ngram_range=ngram_range,
                                           max_features=max_features)
-        self.classifier = OneVsRestClassifier(LogisticRegression(),
-                                              n_jobs=-1)
+        self.classifier = OneVsRestClassifier(SGDClassifier(loss='log'))
 
     def fit(self, x, y):
         print('Fitting...', end='\r')
@@ -33,17 +29,6 @@ class Model:
         with warnings.catch_warnings():
             warnings.filterwarnings('ignore', category=UserWarning)
             self.classifier.fit(vectorized_x, encoded_y)
-
-    def validate(self, x, y):
-        encoded_y = self.label_binarizer.fit_transform(y)
-        vectorized_x = self.vectorizer.fit_transform(x, encoded_y)
-
-        # multiclass.py prints warning if all the entries have the same label value
-        with warnings.catch_warnings():
-            warnings.filterwarnings('ignore', category=UserWarning)
-            cv_scores = cross_val_score(self.classifier, vectorized_x, encoded_y, cv=5)
-
-        return cv_scores
 
     # For each entry returns a vector of probabilities
     def predict(self, x):
@@ -58,10 +43,9 @@ class Model:
 
         for probabilities, real_tags in zip(y_probabilities, y_real):
             tags_n = len(real_tags)
-            top_n_indexes = np.argpartition(probabilities, -tags_n)[-tags_n:]
-            predicted_tags = self.label_binarizer.classes_[top_n_indexes]
-            required_n = ceil(tags_n / 2)
+            predicted_tags = self.evaluate_top_n_tags(tags_n, probabilities)
 
+            required_n = ceil(tags_n / 2)
             if self.check_if_at_least_n_are_common(required_n, predicted_tags,
                                                    real_tags):
                 correct_predictions += 1
@@ -69,6 +53,11 @@ class Model:
         score = correct_predictions / len(y_probabilities)
 
         return score
+
+    def evaluate_top_n_tags(self, n, predicted_probabilities):
+        top_n_indexes = np.argpartition(predicted_probabilities, -n)[-n:]
+        predicted_tags = self.label_binarizer.classes_[top_n_indexes]
+        return predicted_tags
 
     def check_if_at_least_n_are_common(self, n, predicted_tags, real_tags):
         is_common = [tag in predicted_tags for tag in real_tags]
